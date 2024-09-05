@@ -5,18 +5,20 @@ on:
     branches:
       - master
   workflow_dispatch:
+  inputs:
+    environment:
+      description: 'Environment to deploy'
+      required: true
+      default: 'dev'
+      type: choice
+      options:
+        - dev
+        - test
+        - prod
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        environment:
-          - dev
-          - test
-          - stage
-          - prod
 
     steps:
       - name: Checkout code
@@ -28,18 +30,16 @@ jobs:
           terraform_version: 1.5.0 # Specify your Terraform version
 
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/${{ matrix.environment }}
+        working-directory: ${{ github.workspace }}
         run: terraform init
-
+      
+      - name: PWD
+        run: ${{pwd}}
       - name: Terraform Plan
         id: terraform-plan
-        working-directory: ${{ github.workspace }}/${{ matrix.environment }}
-        run: terraform plan -out=tfplan
+        working-directory: ${{ github.workspace }}
+        run: terraform plan -var-file="{{ github.event.inputs.environment }}-terraform.tfvars"
 
-      - name: Upload Terraform Plan
-        uses: actions/upload-artifact@v3
-        with:
-          name: terraform-plan-${{ matrix.environment }}
-          path: ${{ github.workspace }}/${{ matrix.environment }}/tfplan
+     
 
 
