@@ -1,5 +1,5 @@
 
-
+/*
 terraform {
   backend "s3" {
     bucket         = "terraform-state-file-dev-miq"
@@ -10,3 +10,4 @@ terraform {
   }
 }
 
+*/
