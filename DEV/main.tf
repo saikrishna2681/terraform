@@ -1,11 +1,16 @@
 module "s3-bucket"{
-    source = "E:\\TERRAFORM\\AWS-Terraform\\modules\\S3"
+    source = "/Users/saikrishnaogubina/my-git/terraform/modules/S3"
     name = var.name
     environment = var.environment
     days = var.days
     storage_class = var.storage_class
 }
-
+output "s3_arn" {
+  value       = module.s3-bucket.s3_arn
+  description = "The id of S3"
+}
+#testing1
+/*
 
 module "vpc" {
   source                = "E:\\TERRAFORM\\AWS-Terraform\\modules\\VPC"
@@ -67,7 +72,7 @@ module "ec2_instance" {
   #security_group_description = "A security group for my instances."
   vpc_id                = module.vpc.vpc_id
 }
-
+*/
 /*
 
 data "aws_subnet_ids" "private" {
@@ -78,6 +83,8 @@ data "aws_subnet_ids" "private" {
 }
 
 */
+
+/*
 resource "aws_security_group" "db_sg" {
   name        = "db-sg"
   description = "Allow access to PostgreSQL DB"
@@ -125,7 +132,7 @@ module "postgres" {
 output "security_group_postgres" {
   value = module.postgres.security_group_postgres
 }
-
+*/
 /*
 
 output "security_group_id" {
@@ -146,6 +153,7 @@ output "private_ip" {
 
 */
 
+/*
 output "db_instance_endpoint" {
   description = "The endpoint of the PostgreSQL instance."
   value       = module.postgres.db_instance_endpoint
@@ -176,7 +184,6 @@ output "nat_gateway_id" {
 }
 
 
-output "s3_arn" {
-  value       = module.s3-bucket.s3_arn
-  description = "The id of S3"
-}
+
+
+*/
