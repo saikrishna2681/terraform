@@ -5,16 +5,16 @@ on:
     branches:
       - master
   workflow_dispatch:
-  inputs:
-    environment:
-      description: 'Environment to deploy'
-      required: true
-      default: 'dev'
-      type: choice
-      options:
-        - dev
-        - test
-        - prod
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
 
 jobs:
   terraform:
