@@ -126,4 +126,6 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ github.workspace }}
-        run: cd DEV && terraform apply -auto-approve
+        run: |
+          tfvars_file="${{ github.event.inputs.environment }}-terraform.tfvars"
+          cd DEV && terraform apply -auto-approve -var-file="$tfvars_file"
