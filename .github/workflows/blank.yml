@@ -113,6 +113,11 @@ jobs:
         #with:
         #  terraform_version: 1.9.5
 
+      - name: Terraform Init
+        working-directory: ${{ github.workspace }}
+        run: |
+          cd DEV && rm -rf .terraform  && terraform init -upgrade
+
       - name: Download Terraform Plan
         uses: actions/download-artifact@v3
         with:
