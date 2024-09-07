@@ -1,5 +1,5 @@
 module "s3-bucket"{
-    source = "/Users/saikrishnaogubina/my-git/terraform/modules/S3"
+    source = "../modules/S3"
     name = var.name
     environment = var.environment
     days = var.days
@@ -13,7 +13,7 @@ output "s3_arn" {
 
 
 module "vpc" {
-  source                = "/Users/saikrishnaogubina/my-git/terraform/modules/VPC"
+  source                = "../modules/VPC"
   cidr_block            = var.cidr_block
   vpc_name              = var.vpc_name
   public_subnet_cidrs   = var.public_subnet_cidrs
@@ -55,7 +55,7 @@ data "aws_key_pair" "example" {
 }
 
 module "ec2_instance" {
-  source              = "/Users/saikrishnaogubina/my-git/terraform/modules/EC2"
+  source              = "../modules/EC2"
   ami_id              = var.ami_id
   instance_type       = var.instance_type
   key_name            = data.aws_key_pair.example.key_name
@@ -105,7 +105,7 @@ resource "aws_security_group" "db_sg" {
 }
 
 module "postgres" {
-  source              = "/Users/saikrishnaogubina/my-git/terraform/modules/Postgres"
+  source              = "../modules/Postgres"
   name                = var.name
   db_name             = var.db_name
   username            = var.username
