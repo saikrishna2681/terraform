@@ -22,11 +22,6 @@ on:
           - dev
           - test
           - prod
-      approve:
-        description: 'Manual Approval to Proceed with Apply'
-        required: true
-        default: 'false'
-        type: boolean
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -97,24 +92,7 @@ jobs:
           path: ${{ github.workspace }}
 
 
-  approve:
-    needs: plan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Manual Approval
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { inputs } = require('@actions/core');
-            const approval = inputs.approve === 'true';
-            if (approval) {
-              console.log('Approval granted.');
-            } else {
-              console.log('Manual approval not granted.');
-              process.exit(1);  // Fail the job to prevent the apply job from running
-            }
-        env:
-          INPUT_APPROVE: ${{ github.event.inputs.approve }}
+  
 
   apply:
     needs: plan
