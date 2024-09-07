@@ -10,10 +10,10 @@ output "s3_arn" {
   description = "The id of S3"
 }
 #testing2
-/*
+
 
 module "vpc" {
-  source                = "E:\\TERRAFORM\\AWS-Terraform\\modules\\VPC"
+  source                = "/Users/saikrishnaogubina/my-git/terraform/modules/VPC"
   cidr_block            = var.cidr_block
   vpc_name              = var.vpc_name
   public_subnet_cidrs   = var.public_subnet_cidrs
@@ -55,7 +55,7 @@ data "aws_key_pair" "example" {
 }
 
 module "ec2_instance" {
-  source              = "E:\\TERRAFORM\\AWS-Terraform\\modules\\EC2"
+  source              = "/Users/saikrishnaogubina/my-git/terraform/modules/EC2"
   ami_id              = var.ami_id
   instance_type       = var.instance_type
   key_name            = data.aws_key_pair.example.key_name
@@ -72,7 +72,7 @@ module "ec2_instance" {
   #security_group_description = "A security group for my instances."
   vpc_id                = module.vpc.vpc_id
 }
-*/
+
 /*
 
 data "aws_subnet_ids" "private" {
@@ -84,7 +84,7 @@ data "aws_subnet_ids" "private" {
 
 */
 
-/*
+
 resource "aws_security_group" "db_sg" {
   name        = "db-sg"
   description = "Allow access to PostgreSQL DB"
@@ -105,7 +105,7 @@ resource "aws_security_group" "db_sg" {
 }
 
 module "postgres" {
-  source              = "E:\\TERRAFORM\\AWS-Terraform\\modules\\Postgres"
+  source              = "/Users/saikrishnaogubina/my-git/terraform/modules/Postgres"
   name                = var.name
   db_name             = var.db_name
   username            = var.username
@@ -132,7 +132,7 @@ module "postgres" {
 output "security_group_postgres" {
   value = module.postgres.security_group_postgres
 }
-*/
+
 /*
 
 output "security_group_id" {
@@ -153,7 +153,7 @@ output "private_ip" {
 
 */
 
-/*
+
 output "db_instance_endpoint" {
   description = "The endpoint of the PostgreSQL instance."
   value       = module.postgres.db_instance_endpoint
@@ -186,4 +186,3 @@ output "nat_gateway_id" {
 
 
 
-*/
