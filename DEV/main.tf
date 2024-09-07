@@ -58,7 +58,7 @@ module "ec2_instance" {
   source              = "../modules/EC2"
   ami_id              = var.ami_id
   instance_type       = var.instance_type
-  key_name            = data.aws_key_pair.example.key_name
+  key_name            = var.key_name
   subnet_id           = module.vpc.public_subnet_ids[0]
   security_groups     = [module.vpc.security_group_public]
   instance_name       = var.instance_name
