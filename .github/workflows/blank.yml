@@ -121,4 +121,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ github.workspace }}
-        run: cd DEV && terraform apply -auto-approve tfplan
+        run: cd DEV && terraform apply -auto-approve
