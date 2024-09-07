@@ -1,0 +1,102 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Terraform Plan
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  plan:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      - name: Print working directory
+        run: pwd
+
+      - name: List files in working directory
+        run: ls -al
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1  # Specify your region
+      
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+        
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        #with:
+        #  terraform_version: 1.9.5
+
+      
+          
+      - name: Terraform Init
+        working-directory: ${{ github.workspace }}
+        run: |
+          cd DEV && rm -rf .terraform  && terraform init -upgrade
+      - name: Terraform Plan
+        working-directory: ${{ github.workspace }}
+        run: |
+          # Define the path to the tfvars file
+          tfvars_file="${{ github.event.inputs.environment }}-terraform.tfvars"
+          
+          # Check if the tfvars file exists
+          #if [ ! -f "$tfvars_file" ]; then
+          #  echo "Error: File $tfvars_file does not exist."
+          #  exit 1
+          #fi
+          
+          # Run terraform plan with the specified tfvars file
+          #terraform plan -var-file="$tfvars_file"
+          
+          cd DEV && rm -rf tfplan && terraform plan -var-file="$tfvars_file" -out=tfplan
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-plan
+          path: ${{ github.workspace }}
+
+      - name: Request Approval
+        run: echo "Approval required to proceed with Terraform apply"
+
+      - name: Terraform Apply
+        working-directory: ${{ github.workspace }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: |
+          tfvars_file="${{ github.event.inputs.environment }}-terraform.tfvars"
+          cd DEV && terraform apply -auto-approve -var-file="$tfvars_file"
